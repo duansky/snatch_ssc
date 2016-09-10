@@ -1,15 +1,16 @@
 package main
 
 import (
-	"fmt"
+	"snatch_ssc/job"
+	"snatch_ssc/models/snatch"
 	_ "snatch_ssc/routers"
 
 	"github.com/astaxie/beego"
 )
 
 func init() {
-	fmt.Println("====init")
-
+	snatch.Proccess()
+	job.StartJob()
 }
 
 func main() {
