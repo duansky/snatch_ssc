@@ -1,6 +1,7 @@
 package cqssc
 
 import (
+	"reflect"
 	"snatch_ssc/ioc"
 	"snatch_ssc/job"
 	"snatch_ssc/models/snatch/inter"
@@ -10,10 +11,16 @@ import (
 )
 
 // 重庆时时彩官网
-type CqSnatch struct {
+type CqCollection struct {
 }
 
-func CreateCqJob() (cron.EntryID, error) {
+func init() {
+	ioc.Register("snatch.ssc.cq", reflect.TypeOf(new(CqCollection)))
+	ioc.Print()
+}
+
+// 采集
+func (this *CqCollection) DoCollection() (cron.EntryID, error) {
 	return job.CreateJob(beego.AppConfig.String("job::spec.ssc.snatch"), func() {
 		beego.Info("--------snatch.ssc.cq")
 		if obj, ok := ioc.Create("snatch.ssc.cq.cqcp"); ok {

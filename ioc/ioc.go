@@ -1,6 +1,9 @@
 package ioc
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 var factory = make(map[string]reflect.Type)
 
@@ -9,6 +12,7 @@ func Register(name string, t reflect.Type) {
 }
 
 func Create(name string) (interface{}, bool) {
+
 	t, ok := factory[name]
 
 	if ok {
@@ -18,4 +22,8 @@ func Create(name string) (interface{}, bool) {
 	} else {
 		return nil, false
 	}
+}
+
+func Print() {
+	fmt.Println("====ioc_map:", factory)
 }

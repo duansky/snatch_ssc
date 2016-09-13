@@ -2,7 +2,10 @@ package snatch
 
 import (
 	"fmt"
-	"snatch_ssc/models/snatch/cqssc"
+	"snatch_ssc/ioc"
+	"snatch_ssc/models/snatch/inter"
+
+	_ "snatch_ssc/models/snatch/cqssc"
 
 	"github.com/astaxie/beego"
 )
@@ -11,12 +14,14 @@ import (
 func Proccess() error {
 
 	/********* 读取配置分别启动CQ、BJ、GX等采集 **********/
-	fmt.Println(beego.AppConfig.Strings("snatch::data.collection.item"))
+	items := beego.AppConfig.Strings("snatch::data.collection.item")
+	fmt.Println(items)
 
-	id, err := cqssc.CreateCqJob()
-	_ = id
-	if err != nil {
-		beego.Error(err)
+	for _, item := range items {
+		if obj, ok := ioc.Create(fmt.Sprintf("snatch.ssc.%s", item)); ok {
+			dc := obj.(inter.DataCollection)
+			dc.DoCollection()
+		}
 	}
 
 	return nil
