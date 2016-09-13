@@ -14,7 +14,7 @@ type CqSnatch struct {
 }
 
 func CreateCqJob() (cron.EntryID, error) {
-	return job.CreateJob(beego.AppConfig.String("job.spec.ssc.snatch"), func() {
+	return job.CreateJob(beego.AppConfig.String("job::spec.ssc.snatch"), func() {
 		beego.Info("--------snatch.ssc.cq")
 		if obj, ok := ioc.Create("snatch.ssc.cq.cqcp"); ok {
 			sc := obj.(inter.Snatch)
