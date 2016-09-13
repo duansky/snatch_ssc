@@ -20,9 +20,9 @@ func init() {
 }
 
 // 采集
-func (this *CqCollection) DoCollection() (cron.EntryID, error) {
-	return job.CreateJob(beego.AppConfig.String("job::spec.ssc.snatch"), func() {
-		beego.Info("--------snatch.ssc.cq")
+func (this *CqCollection) DoCollection() (ids map[string]cron.EntryID, err error) {
+	id, err := job.CreateJob(beego.AppConfig.String("job::spec.ssc.snatch"), func() {
+		beego.Info("--------snatch.ssc.cqcp")
 		if obj, ok := ioc.Create("snatch.ssc.cq.cqcp"); ok {
 			sc := obj.(inter.Snatch)
 			content, err := sc.Snatch()
@@ -32,8 +32,38 @@ func (this *CqCollection) DoCollection() (cron.EntryID, error) {
 			}
 			// 解析html
 			datas := sc.Resolve(content)
-			DataProcesser := obj.(inter.DataProcesser)
-			DataProcesser.Processing(datas)
+			dataProcesser := obj.(inter.DataProcesser)
+			dataProcesser.Processing(datas)
 		}
 	})
+	if err != nil {
+		beego.Error(err)
+		return nil, err
+	}
+
+	ids = make(map[string]cron.EntryID)
+	ids["snatch.ssc.cq.cqcp"] = id
+
+	id, err = job.CreateJob(beego.AppConfig.String("job::spec.ssc.snatch"), func() {
+		beego.Info("--------snatch.ssc.cqleicai")
+		if obj, ok := ioc.Create("snatch.ssc.cq.leicai"); ok {
+			sc := obj.(inter.Snatch)
+			content, err := sc.Snatch()
+			if err != nil {
+				beego.Error(err)
+				return
+			}
+			// 解析html
+			datas := sc.Resolve(content)
+			dataProcesser := obj.(inter.DataProcesser)
+			dataProcesser.Processing(datas)
+		}
+	})
+	if err != nil {
+		beego.Error(err)
+		return nil, err
+	}
+	ids["snatch.ssc.cq.leicai"] = id
+
+	return ids, nil
 }

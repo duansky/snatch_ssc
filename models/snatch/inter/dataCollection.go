@@ -3,5 +3,5 @@ package inter
 import "gopkg.in/robfig/cron.v2"
 
 type DataCollection interface {
-	DoCollection() (cron.EntryID, error)
+	DoCollection() (map[string]cron.EntryID, error)
 }
