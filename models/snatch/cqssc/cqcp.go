@@ -15,14 +15,16 @@ import (
 
 // 重庆时时彩官网
 type CqcpSnatch struct {
+	Type string
+	From string
 }
 
 func init() {
-	ioc.Register("snatch.ssc.cq.cqcp", reflect.TypeOf(new(CqcpSnatch)))
+	ioc.Register("snatch.ssc.cq.cqcp", reflect.TypeOf(&CqcpSnatch{Type: "cq", From: "cqcp"}))
 }
 
 // 抓取网页
-func (this *CqcpSnatch) Snatch() (string, error) {
+func (c *CqcpSnatch) Snatch() (string, error) {
 	doc, err := goquery.NewDocument("http://www.cqcp.net/game/ssc")
 	if err != nil {
 		beego.Error(err)
@@ -34,6 +36,7 @@ func (this *CqcpSnatch) Snatch() (string, error) {
 
 // 解析网页数据
 func (this *CqcpSnatch) Resolve(content string) (datas []*inter.SscData) {
+	beego.Info("---Resolve:", this)
 	datas = make([]*inter.SscData, 0, 10)
 	if !sys.HasValue(content) {
 		return datas
@@ -64,4 +67,8 @@ func (this *CqcpSnatch) Resolve(content string) (datas []*inter.SscData) {
 func (this *CqcpSnatch) Processing(datas []*inter.SscData) {
 	j, _ := json.Marshal(datas)
 	beego.Info(string(j))
+}
+
+func (this *CqcpSnatch) GetType() (string, string) {
+	return "cq", "cqcp"
 }

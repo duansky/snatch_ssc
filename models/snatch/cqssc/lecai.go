@@ -17,6 +17,8 @@ import (
 
 // 乐彩官网
 type LecaiSnatch struct {
+	Type string
+	From string
 }
 
 func init() {
@@ -71,4 +73,9 @@ func (this *LecaiSnatch) Resolve(content string) (datas []*inter.SscData) {
 func (this *LecaiSnatch) Processing(datas []*inter.SscData) {
 	j, _ := json.Marshal(datas)
 	beego.Info(string(j))
+}
+
+func (this *LecaiSnatch) GetType() (string, string) {
+
+	return "cq", "lecai"
 }

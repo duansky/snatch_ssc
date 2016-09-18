@@ -1,6 +1,10 @@
 package inter
 
-import "snatch_ssc/sys"
+import (
+	"snatch_ssc/sys"
+
+	"gopkg.in/robfig/cron.v2"
+)
 
 type SscData struct {
 	No      sys.NullString `json:"no"`      // 期号
@@ -13,4 +17,18 @@ type Snatch interface {
 	Snatch() (string, error)
 	// 解析网页数据
 	Resolve(string) []*SscData
+}
+
+// 大采集接口, CQ、BJ、GX实现此接口
+type DataCollection interface {
+	// 进行抓取、解析...
+	DoCollection() (map[string]cron.EntryID, error)
+}
+
+// 数据后续处理接口
+type DataProcesser interface {
+	// 把采集到的数据进行后续处理, 如入库、推送等等
+	Processing([]*SscData)
+	// 获取类型和来源
+	GetType() (string, string)
 }
