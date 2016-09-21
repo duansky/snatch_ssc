@@ -24,11 +24,3 @@ type DataCollection interface {
 	// 进行抓取、解析...
 	DoCollection() (map[string]cron.EntryID, error)
 }
-
-// 数据后续处理接口
-type DataProcesser interface {
-	// 把采集到的数据进行后续处理, 如入库、推送等等
-	Processing([]*SscData)
-	// 获取类型和来源
-	GetType() (string, string)
-}

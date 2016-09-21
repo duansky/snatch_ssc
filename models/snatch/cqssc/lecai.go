@@ -3,8 +3,8 @@ package cqssc
 import (
 	"encoding/json"
 	"net/http"
-	"reflect"
 	"snatch_ssc/ioc"
+	"snatch_ssc/models/snatch/base"
 	"snatch_ssc/models/snatch/inter"
 	"strings"
 	"time"
@@ -17,12 +17,11 @@ import (
 
 // 乐彩官网
 type LecaiSnatch struct {
-	Type string
-	From string
+	base.DataProcesserAbs
 }
 
 func init() {
-	ioc.Register("snatch.ssc.cq.leicai", reflect.TypeOf(new(LecaiSnatch)))
+	ioc.RegisterObj("snatch.ssc.cq.lecai", &LecaiSnatch{base.DataProcesserAbs{Type: "cq", Site: "lecai"}})
 }
 
 // 抓取网页
@@ -70,12 +69,9 @@ func (this *LecaiSnatch) Resolve(content string) (datas []*inter.SscData) {
 	return datas
 }
 
-func (this *LecaiSnatch) Processing(datas []*inter.SscData) {
-	j, _ := json.Marshal(datas)
-	beego.Info(string(j))
-}
-
-func (this *LecaiSnatch) GetType() (string, string) {
-
-	return "cq", "lecai"
-}
+//func (this *LecaiSnatch) Processing(datas []*inter.SscData) {
+//	j, _ := json.Marshal(datas)
+//	beego.Info(string(j))
+//	t, s := this.GetType()
+//	beego.Info("===LecaiSnatch_Processing:", t, s)
+//}

@@ -1,9 +1,8 @@
 package cqssc
 
 import (
-	"encoding/json"
-	"reflect"
 	"snatch_ssc/ioc"
+	"snatch_ssc/models/snatch/base"
 	"snatch_ssc/models/snatch/inter"
 	"strings"
 
@@ -15,12 +14,11 @@ import (
 
 // 重庆时时彩官网
 type CqcpSnatch struct {
-	Type string
-	From string
+	base.DataProcesserAbs
 }
 
 func init() {
-	ioc.Register("snatch.ssc.cq.cqcp", reflect.TypeOf(&CqcpSnatch{Type: "cq", From: "cqcp"}))
+	ioc.RegisterObj("snatch.ssc.cq.cqcp", &CqcpSnatch{base.DataProcesserAbs{Type: "cq", Site: "cqcp"}})
 }
 
 // 抓取网页
@@ -36,7 +34,6 @@ func (c *CqcpSnatch) Snatch() (string, error) {
 
 // 解析网页数据
 func (this *CqcpSnatch) Resolve(content string) (datas []*inter.SscData) {
-	beego.Info("---Resolve:", this)
 	datas = make([]*inter.SscData, 0, 10)
 	if !sys.HasValue(content) {
 		return datas
@@ -64,11 +61,9 @@ func (this *CqcpSnatch) Resolve(content string) (datas []*inter.SscData) {
 	return datas
 }
 
-func (this *CqcpSnatch) Processing(datas []*inter.SscData) {
-	j, _ := json.Marshal(datas)
-	beego.Info(string(j))
-}
-
-func (this *CqcpSnatch) GetType() (string, string) {
-	return "cq", "cqcp"
-}
+//func (this *CqcpSnatch) Processing(datas []*inter.SscData) {
+//	j, _ := json.Marshal(datas)
+//	beego.Info(string(j))
+//	t, s := this.GetType()
+//	beego.Info("===CqcpSnatch_Processing:", t, s)
+//}
