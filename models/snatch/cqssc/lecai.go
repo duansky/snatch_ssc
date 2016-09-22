@@ -68,10 +68,3 @@ func (this *LecaiSnatch) Resolve(content string) (datas []*inter.SscData) {
 
 	return datas
 }
-
-//func (this *LecaiSnatch) Processing(datas []*inter.SscData) {
-//	j, _ := json.Marshal(datas)
-//	beego.Info(string(j))
-//	t, s := this.GetType()
-//	beego.Info("===LecaiSnatch_Processing:", t, s)
-//}

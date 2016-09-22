@@ -60,10 +60,3 @@ func (this *CqcpSnatch) Resolve(content string) (datas []*inter.SscData) {
 
 	return datas
 }
-
-//func (this *CqcpSnatch) Processing(datas []*inter.SscData) {
-//	j, _ := json.Marshal(datas)
-//	beego.Info(string(j))
-//	t, s := this.GetType()
-//	beego.Info("===CqcpSnatch_Processing:", t, s)
-//}
