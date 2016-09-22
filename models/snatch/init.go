@@ -11,6 +11,7 @@ import (
 	"gopkg.in/robfig/cron.v2"
 
 	_ "snatch_ssc/models/snatch/cqssc"
+	_ "snatch_ssc/models/snatch/gdklsf"
 
 	"github.com/astaxie/beego"
 )
@@ -44,7 +45,6 @@ func doCollection(t string) (ids map[string]cron.EntryID, err error) {
 		id, err := job.CreateJob(beego.AppConfig.String(fmt.Sprintf("job::spec.snatch.ssc.%s", t)), func() {
 			beego.Info("--------", key)
 			if obj, ok := ioc.CreateObj(key); ok {
-				fmt.Printf("=========t:%T\r", obj)
 				sc := obj.(inter.Snatch)
 				content, err := sc.Snatch()
 				if err != nil {

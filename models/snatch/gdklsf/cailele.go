@@ -1,9 +1,11 @@
 package gdklsf
 
 import (
+	"fmt"
 	"snatch_ssc/ioc"
 	"snatch_ssc/models/snatch/base"
 	"snatch_ssc/models/snatch/inter"
+	"strings"
 
 	"snatch_ssc/sys"
 
@@ -38,26 +40,20 @@ func (this *CaileleSnatch) Resolve(content string) (datas []*inter.SscData) {
 		return datas
 	}
 
-	beego.Info("=-===content:", content)
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
+	if err != nil {
+		beego.Error(err)
+	}
 
-	//	doc, err := goquery.NewDocumentFromReader(strings.NewReader(content))
-	//	if err != nil {
-	//		beego.Error(err)
-	//	}
-
-	//	doc.Find("#openlist").Children().Each(func(i int, s *goquery.Selection) {
-	//		data := new(inter.SscData)
-	//		// For each item found
-	//		if i > 0 {
-	//			no, _ := s.Children().Eq(0).Html()
-	//			data.No.SetValue(no)
-
-	//			results, _ := s.Children().Eq(1).Html()
-	//			data.Results.SetValue(strings.Replace(results, "-", ",", -1))
-
-	//			datas = append(datas, data)
-	//		}
-	//	})
+	date := doc.Find(".cz_name_period").Text()[:8]
+	doc.Find(".stripe").Each(func(i int, s *goquery.Selection) {
+		s.Find("tbody tr").Each(func(j int, tr *goquery.Selection) {
+			data := new(inter.SscData)
+			data.No.SetValue(fmt.Sprintf("%s0%s", date, tr.Children().First().Text()))
+			data.Results.SetValue(tr.Children().Last().Text())
+			datas = append(datas, data)
+		})
+	})
 
 	return datas
 }

@@ -25,6 +25,8 @@ type DataProcesserAbs struct {
 
 // 数据后续处理
 func (this *DataProcesserAbs) Processing(datas []*inter.SscData, t, s string) {
+	j, _ := json.Marshal(datas)
+	beego.Info(string(j))
 	// 数据入库
 	save(datas, t, s)
 	// 数据推送
@@ -38,9 +40,6 @@ func (this *DataProcesserAbs) GetType() (string, string) {
 
 // 数据入库
 func save(datas []*inter.SscData, t, s string) {
-	j, _ := json.Marshal(datas)
-	beego.Info(string(j))
-
 	o := orm.NewOrm()
 	for _, v := range datas {
 

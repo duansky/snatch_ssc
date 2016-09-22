@@ -28,7 +28,6 @@ func RegisterObj(name string, o interface{}) {
 }
 
 func CreateObj(name string) (interface{}, bool) {
-
 	o, ok := objs[name]
 
 	if ok {
