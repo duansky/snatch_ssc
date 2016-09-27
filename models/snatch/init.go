@@ -40,13 +40,21 @@ func doCollection(t string) (ids map[string]cron.EntryID, err error) {
 
 	ids = make(map[string]cron.EntryID)
 	for _, site := range sites {
+
 		if strings.TrimSpace(site) == "" {
 			continue
 		}
 
 		key := fmt.Sprintf("snatch.ssc.%s.%s", t, site)
 		id, err := job.CreateJob(beego.AppConfig.String(fmt.Sprintf("job::spec.snatch.ssc.%s", t)), func() {
-			beego.Info("--------", key)
+			// 防止意外的错误导致程序退出
+			defer func() {
+				if err := recover(); err != nil {
+					beego.Error(fmt.Sprintf("=====type:%s,site:%s, err:", t, site), err)
+				}
+			}()
+
+			//			beego.Info("--------", key)
 			if obj, ok := ioc.CreateObj(key); ok {
 				sc := obj.(inter.Snatch)
 				content, err := sc.Snatch()

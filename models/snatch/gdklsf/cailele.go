@@ -5,6 +5,7 @@ import (
 	"snatch_ssc/models/snatch/base"
 	"snatch_ssc/models/snatch/inter"
 	"strings"
+	"time"
 
 	"snatch_ssc/sys"
 
@@ -44,7 +45,14 @@ func (this *CaileleSnatch) Resolve(content string) (datas []*inter.SscData) {
 		beego.Error(err)
 	}
 
-	date := doc.Find(".cz_name_period").Text()[:8]
+	cz_name_period := doc.Find(".cz_name_period").Text()
+	var date string
+	if len(cz_name_period) < 8 {
+		date = time.Now().Format("20060102")
+	} else {
+		date = doc.Find(".cz_name_period").Text()[:8]
+	}
+
 	doc.Find(".stripe").Each(func(i int, s *goquery.Selection) {
 		s.Find("tbody tr").Each(func(j int, tr *goquery.Selection) {
 			data := new(inter.SscData)

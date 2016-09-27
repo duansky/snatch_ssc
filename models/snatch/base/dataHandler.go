@@ -27,6 +27,7 @@ type DataProcesserAbs struct {
 // 数据后续处理
 func (this *DataProcesserAbs) Processing(datas []*inter.SscData, t, s string) {
 	j, _ := json.Marshal(datas)
+	beego.Info("-------type:", t, ",site:", s)
 	beego.Info(string(j))
 	// 数据入库
 	save(datas, t, s)
