@@ -12,6 +12,9 @@ import (
 
 	_ "snatch_ssc/models/snatch/cqssc"
 	_ "snatch_ssc/models/snatch/gdklsf"
+	_ "snatch_ssc/models/snatch/gxklsf"
+	_ "snatch_ssc/models/snatch/hnklsf"
+	_ "snatch_ssc/models/snatch/tjklsf"
 
 	"github.com/astaxie/beego"
 )

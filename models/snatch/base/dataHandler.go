@@ -5,6 +5,7 @@ import (
 	"snatch_ssc/models"
 	"snatch_ssc/models/snatch/inter"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -42,12 +43,14 @@ func (this *DataProcesserAbs) GetType() (string, string) {
 func save(datas []*inter.SscData, t, s string) {
 	o := orm.NewOrm()
 	for _, v := range datas {
-
+		if strings.TrimSpace(v.Results.String()) == "" {
+			continue
+		}
 		// 也可以直接使用对象作为表名
 		var d models.Data
 		qs := o.QueryTable(d)
 		if err := qs.Filter("no", v.No.String()).Filter("type", t).One(&d); err != nil {
-			o.Insert(&models.Data{No: v.No.String(), Results: v.Results.String(), Type: t, Site: s})
+			o.Insert(&models.Data{No: v.No.String(), Results: v.Results.String(), Type: t, Site: s, SnatchTime: time.Now()})
 		} else {
 			// 如果不存在s站点的数据则添加s站点
 			if !strings.Contains(d.Site, s) {

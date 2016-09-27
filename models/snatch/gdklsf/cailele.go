@@ -1,7 +1,6 @@
 package gdklsf
 
 import (
-	"fmt"
 	"snatch_ssc/ioc"
 	"snatch_ssc/models/snatch/base"
 	"snatch_ssc/models/snatch/inter"
@@ -49,9 +48,14 @@ func (this *CaileleSnatch) Resolve(content string) (datas []*inter.SscData) {
 	doc.Find(".stripe").Each(func(i int, s *goquery.Selection) {
 		s.Find("tbody tr").Each(func(j int, tr *goquery.Selection) {
 			data := new(inter.SscData)
-			data.No.SetValue(fmt.Sprintf("%s0%s", date, tr.Children().First().Text()))
-			data.Results.SetValue(tr.Children().Last().Text())
-			datas = append(datas, data)
+			data.No.SetValue(date + tr.Children().First().Text())
+			results := tr.Children().Last().Text()
+			data.Results.SetValue(results)
+
+			if !(strings.TrimSpace(results) == "" || strings.TrimSpace(tr.Children().First().Text()) == "") {
+				datas = append(datas, data)
+			}
+
 		})
 	})
 

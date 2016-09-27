@@ -70,3 +70,26 @@ func Sha512(s string) string {
 	data := []byte(s)
 	return strings.ToLower(fmt.Sprintf("%x", sha512.Sum512(data)))
 }
+
+// 开奖号码个位数前面补零
+func ResultsFillZero(results, sep string) string {
+	array := strings.Split(results, sep)
+	r := make([]string, 0, len(array))
+	for _, s := range array {
+		r = append(r, AsZeroNo(s))
+	}
+
+	return strings.Join(r, sep)
+}
+
+// 截取start至end中间的字符，不包括start和end
+func MidStr(s, start, end string) string {
+	iStart := strings.Index(s, start) + len(start)
+	if len(s) < iStart {
+		return ""
+	}
+	s = s[iStart:]
+	iEnd := strings.Index(s, end)
+
+	return s[:iEnd]
+}
