@@ -2,6 +2,7 @@ package snatch
 
 import (
 	"fmt"
+	"io/ioutil"
 	"snatch_ssc/ioc"
 	"snatch_ssc/job"
 	"snatch_ssc/models/snatch/base"
@@ -50,7 +51,7 @@ func doCollection(t string) (ids map[string]cron.EntryID, err error) {
 			// 防止意外的错误导致程序退出
 			defer func() {
 				if err := recover(); err != nil {
-					beego.Error(fmt.Sprintf("=====type:%s,site:%s, err:", t, site), err)
+					ioutil.WriteFile(fmt.Sprintf("%s_%s.log", t, site), []byte(fmt.Sprintf(fmt.Sprintf("type:%s,site:%s, err:%s", t, site, err))), 777)
 				}
 			}()
 
