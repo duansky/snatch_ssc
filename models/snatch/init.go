@@ -11,6 +11,7 @@ import (
 
 	"gopkg.in/robfig/cron.v2"
 
+	_ "snatch_ssc/models/snatch/bjkl8"
 	_ "snatch_ssc/models/snatch/cqssc"
 	_ "snatch_ssc/models/snatch/gdklsf"
 	_ "snatch_ssc/models/snatch/gxklsf"
